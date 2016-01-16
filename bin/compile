@@ -149,13 +149,13 @@ then
     warn ""
     name=$(cat $build/.godir)
     ver=${GOVERSION:-$DEFAULT_GO_VERSION}
-elif gb info &> /dev/null
+elif (cd $build && gb info &> /dev/null)
 then
     ver=${GOVERSION:-$DEFAULT_GO_VERSION}
     GB="true"
 else
     find .
-    gb info
+    (cd $build && gb info)
     warn "Godeps are required. For instructions:"
     warn "https://devcenter.heroku.com/articles/go-support"
     exit 1
