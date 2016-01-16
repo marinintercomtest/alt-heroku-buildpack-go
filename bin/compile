@@ -155,6 +155,7 @@ then
     GB="true"
 else
     gb info
+    find .
     warn "Godeps are required. For instructions:"
     warn "https://devcenter.heroku.com/articles/go-support"
     exit 1
