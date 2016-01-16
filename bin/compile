@@ -99,6 +99,11 @@ finished() {
     echo "done"
 }
 
+installGo() {
+    local ver=$1
+    
+}
+
 # Default to $SOURCE_VERSION environment variable
 GO_LINKER_VALUE=${SOURCE_VERSION}
 
@@ -149,7 +154,7 @@ then
     warn ""
     name=$(cat $build/.godir)
     ver=${GOVERSION:-$DEFAULT_GO_VERSION}
-elif (cd $build && gb info)
+elif (cd $build && gb info $> /dev/null)
 then
     ver=${GOVERSION:-$DEFAULT_GO_VERSION}
     GB="true"
@@ -197,6 +202,7 @@ if test "$GB" = "true"
 then
     # gb path
     cd $build
+    gb info
     gb build
 else
     # godep + other older paths
