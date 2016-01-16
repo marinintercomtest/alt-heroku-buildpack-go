@@ -154,7 +154,7 @@ then
     warn ""
     name=$(cat $build/.godir)
     ver=${GOVERSION:-$DEFAULT_GO_VERSION}
-elif (cd $build && gb info $> /dev/null)
+elif (cd $build && gb info)
 then
     ver=${GOVERSION:-$DEFAULT_GO_VERSION}
     GB="true"
