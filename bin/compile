@@ -154,8 +154,8 @@ then
     ver=${GOVERSION:-$DEFAULT_GO_VERSION}
     GB="true"
 else
-    gb info
     find .
+    gb info
     warn "Godeps are required. For instructions:"
     warn "https://devcenter.heroku.com/articles/go-support"
     exit 1
