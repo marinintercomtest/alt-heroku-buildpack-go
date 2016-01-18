@@ -95,6 +95,7 @@ finished() {
     echo "done"
 }
 
+# Check we have a proper build file
 if ! test -f $build/production_build_go.json
 then
   warn "production_build_go_file is required"
@@ -110,46 +111,7 @@ else
   ver=$(<$build/production_build_go.json jq -r .GoVersion)
 fi
 
-# if test -f $build/Godeps
-# then
-#     warn ""
-#     warn "Deprecated, old ./Godeps file found!"
-#     warn ""
-#     warn "Support for this old version of Godeps is ending on 2016/02/01"
-#     warn ""
-#     warn "Please upgrade godeps (go get -u github.com/tools/godep) and"
-#     warn "re-save your dependencies: godep save -r ./..."
-#     warn ""
-#     warn "See also: https://devcenter.heroku.com/articles/go-dependencies-via-godep"
-#     warn ""
-#     name=$(<$build/Godeps jq -r .ImportPath)
-#     ver=$(<$build/Godeps jq -r .GoVersion)
-# elif test -f $build/Godeps/Godeps.json
-# then
-#     step "Checking Godeps/Godeps.json file."
-#     if ! jq -r . < $build/Godeps/Godeps.json > /dev/null
-#     then
-#         warn "Bad Godeps/Godeps.json file"
-#         exit 1
-#     fi
-#     name=$(<$build/Godeps/Godeps.json jq -r .ImportPath)
-#     ver=$(<$build/Godeps/Godeps.json jq -r .GoVersion)
-# elif test -f $build/.godir
-# then
-#     warn ""
-#     warn "Deprecated, .godir file found!"
-#     warn ""
-#     warn "Support for .godir is ending on 2016/02/01"
-#     warn "See also: https://devcenter.heroku.com/articles/go-dependencies-via-godep"
-#     warn ""
-#     name=$(cat $build/.godir)
-#     ver=go${GOVERSION:-1.5}
-# else
-#     warn "Godeps are required. For instructions:"
-#     warn "https://devcenter.heroku.com/articles/go-support"
-#     exit 1
-# fi
-
+# Install the right version of Go
 ver=$(expand_ver $ver)
 
 file=${GOFILE:-$ver.linux-amd64.tar.gz}
@@ -184,27 +146,14 @@ GOROOT=$cache/$ver/go export GOROOT
 GOPATH=$build/.heroku/go export GOPATH
 PATH=$GOROOT/bin:$PATH
 
-
-# if ! (test -d $build/Godeps || (which hg >/dev/null && which bzr >/dev/null))
-# then
-#     echo
-#     echo "       Tired of waiting for bzr and hg?"
-#     echo "       Use github.com/tools/godep for faster deploys."
-#     echo
-#
-#     start "Installing Virtualenv"
-#         virtualenv --python $python --distribute --never-download --prompt='(venv) ' $venv > /dev/null 2>&1
-#         . $venv/bin/activate > /dev/null 2>&1
-#     finished
-#
-#     start "Installing Mercurial"
-#         pip install mercurial > /dev/null 2>&1
-#     finished
-#
-#     start "Installing Bazaar"
-#         pip install bzr > /dev/null 2>&1
-#     finished
-# fi
+# Enforce user of /vendor folder
+if test ! -d "$build/vendor"
+then
+  warn ""
+  warn "vendor/ directory does not exist."
+  warn ""
+  exit 1
+fi
 
 p=$GOPATH/src/$name
 mkdir -p $p
@@ -227,45 +176,7 @@ then
     done
 fi
 
-# if test -e $build/Godeps/Godeps.json
-# then
-#   pkgs=$(<$build/Godeps/Godeps.json jq -r 'if .Packages then .Packages | join(" ") else "." end')
-# else
-#   pkgs="./..."
-# fi
-
-# pkgs="./..."
-
-# case $ver in
-#   go1.5*)
-#     if test "$GO15VENDOREXPERIMENT" = "1"
-#     then
-#       warn ""
-#       warn "\$GO15VENDOREXPERIMENT=1. This is an experiment. Things may not work as expected."
-#       warn "See https://devcenter.heroku.com/articles/go-support#go-1-5-vendor-experiment for more info."
-#       warn ""
-#       if test ! -d "$build/vendor"
-#       then
-#         warn ""
-#         warn "vendor/ directory does not exist."
-#         warn ""
-#         exit 1
-#       fi
-#       VendorExperiment="true"
-#     fi
-#   ;;
-#   go1.6*)
-#     if test "$GO15VENDOREXPERIMENT" = "0"
-#     then
-#       VendorExperiment="false"
-#     else
-#       VendorExperiment="true"
-#     fi
-#   ;;
-#   *)
-#     VendorExperiment="false"
-#   ;;
-# esac
+pkgs="./..."
 
 # If $GO_LINKER_SYMBOL and GO_LINKER_VALUE are set, tell the linker to DTRT
 FLAGS=(-tags heroku)
@@ -285,28 +196,12 @@ fi
 unset GIT_DIR # unset git dir or it will mess with goinstall
 cd $p
 
-# step "Running: go install -v ${FLAGS[@]} $pkgs"
-# go install -v "${FLAGS[@]}" $pkgs
-# step "Running: go install -v ${FLAGS[@]}"
-# go install -v "${FLAGS[@]}"
-#
-# # if test -e $build/Godeps
-# # then
-# #     if test "$VendorExperiment" = "true"
-# #     then
-# #       step "Running: go install -v ${FLAGS[@]} $pkgs"
-# #       go install -v "${FLAGS[@]}" $pkgs
-# #     else
-# #       step "Running: godep go install ${FLAGS[@]} $pkgs"
-# #       godep go install "${FLAGS[@]}" $pkgs
-# #     fi
-# # else
-# #     step "Running: go get ${FLAGS[@]} $pkgs"
-# #     go get "${FLAGS[@]}" $pkgs
-# # fi
-#
-# rm -rf $build/.heroku
-#
-# mkdir -p $build/.profile.d
-# echo 'PATH=$PATH:$HOME/bin' > $build/.profile.d/go.sh
-# cp $buildpack/vendor/concurrency.sh $build/.profile.d/
+# Install our package
+step "Running: go install -v ${FLAGS[@]} $pkgs"
+go install -v "${FLAGS[@]}" $pkgs
+
+rm -rf $build/.heroku
+
+mkdir -p $build/.profile.d
+echo 'PATH=$PATH:$HOME/bin' > $build/.profile.d/go.sh
+cp $buildpack/vendor/concurrency.sh $build/.profile.d/
