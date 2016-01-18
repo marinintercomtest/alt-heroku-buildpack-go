@@ -3,16 +3,26 @@
 
 testDetect_NotFound()
 {
-  detect  
-  
+  detect
+
   assertNoAppDetected
 }
 
-testDetect_Go()
+testDetect_NotFound_NoVendorFolder()
 {
   touch ${BUILD_DIR}/main.go
-  
-  detect  
 
-  assertAppDetected "Go"
+  detect
+
+  assertNoAppDetected
+}
+
+testDetect_VendoredGo()
+{
+  touch ${BUILD_DIR}/main.go
+  touch ${BUILD_DIR}/production_build_go
+
+  detect
+
+  assertAppDetected "Vendored Go"
 }
