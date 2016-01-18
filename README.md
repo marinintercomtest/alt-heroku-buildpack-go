@@ -1,6 +1,6 @@
 # Alt Heroku Buildpack: Go at Intercom
 
-This is an alternative buildpack for [Go][go] - built on the standard [Heroku buildpack][buildpack].
+This is an alternative buildpack for [Go][go] - derived from the excellent [Heroku buildpack][buildpack].
 
 ## Getting Started
 
@@ -9,7 +9,7 @@ Add a `production_build_go.json` file at the root of your project, this should s
 ```
 {
   "GoVersion": "go1.5.3",
-  "Name": "myapp"
+  "Name": "github.com/myorg/myapp"
 }
 ```
 
@@ -40,7 +40,7 @@ This can be used to embed the commit sha, or other build specific data directly
 into the compiled executable.
 
 [go]: http://golang.org/
-[buildpack]: http://devcenter.heroku.com/articles/buildpacks
+[buildpack]: https://github.com/heroku/heroku-buildpack-go
 [go-linker]: https://golang.org/cmd/ld/
 [godep]: https://github.com/tools/godep
 [quickstart]: http://mmcgrana.github.com/2012/09/getting-started-with-go-on-heroku.html
