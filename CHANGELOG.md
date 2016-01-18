@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v25 (2016-01-18)
+## v1.0.0 (2016-01-18)
 
 Remove support for Godeps, instead use our own production_build_go.json and /vendor'd dependencies.
 
