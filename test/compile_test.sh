@@ -17,8 +17,12 @@ _createVendoredProject()
 _createSimpleGoMain
 
   mkdir -p ${BUILD_DIR}/vendor
-  cat > ${BUILD_DIR}/production_build_go.json <<EOF
-{ "GoVersion": "1.5.3", "Build": "default", "Name": "mytest" }
+cat > ${BUILD_DIR}/production_build_go.json <<EOF
+{
+  "GoVersion": "go1.5.3",
+  "Build": "default",
+  "Name": "mytest"
+}
 EOF
 }
 
