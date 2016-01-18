@@ -1,4 +1,4 @@
-# Heroku Buildpack: Go
+# Alt Heroku Buildpack: Go at Intercom
 
 This is an alternative buildpack for [Go][go] - built on the standard [Heroku buildpack][buildpack].
 
