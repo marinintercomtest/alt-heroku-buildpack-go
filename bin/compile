@@ -198,7 +198,7 @@ cd $p
 
 # Install our package
 step "Running: go install -v ${FLAGS[@]} $pkgs"
-go install -v "${FLAGS[@]}" $pkgs
+# go install -v "${FLAGS[@]}" $pkgs
 
 rm -rf $build/.heroku
 
