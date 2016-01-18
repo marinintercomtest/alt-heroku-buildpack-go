@@ -20,7 +20,7 @@ testDetect_NotFound_NoVendorFolder()
 testDetect_VendoredGo()
 {
   touch ${BUILD_DIR}/main.go
-  touch ${BUILD_DIR}/production_build_go
+  touch ${BUILD_DIR}/production_build_go.json
 
   detect
 

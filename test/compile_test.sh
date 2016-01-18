@@ -12,55 +12,39 @@ func main() {
 EOF
 }
 
-_createGodirProject()
+_createVendoredProject()
 {
 _createSimpleGoMain
 
-  cat > ${BUILD_DIR}/.godir <<EOF
-test
+  mkdir -p ${BUILD_DIR}/vendor
+  cat > ${BUILD_DIR}/vendor/vendor.json <<EOF
+{
+    "comment": "",
+    "ignore": "test",
+    "package": []
+}
+EOF
+cat > ${BUILD_DIR}/production_build_go.json <<EOF
+{
+  "GoVersion": "1.5.3,
+  "Build": "default",
+  "Name": "mytest"
+}
 EOF
 }
 
-_createGodepsProject()
-{
-_createSimpleGoMain
-
-  mkdir -p ${BUILD_DIR}/Godeps
-  cat > ${BUILD_DIR}/Godeps/Godeps.json <<EOF
-{
-	"ImportPath": "mytest",
-	"GoVersion": "go1.1",
-	"Deps": []
-}
-EOF
-}
-
-testCompileGodepsApp() {
-  _createGodepsProject
+testCompileVendoredApp() {
+  _createVendoredProject
 
   compile
 
   assertCapturedSuccess
 
-  assertCaptured "should install GoVersion from Godeps.json" "-----> Installing go1.1... done"
-  assertCaptured "should run godep go install" "-----> Running: godep go install -tags heroku ./..."
+  assertCaptured "should install GoVersion from production_build_go.json" "-----> Installing go1.5.3... done"
+  assertCaptured "should run go install" "-----> Running: go install -v -tags heroku ./..."
 
   assertTrue "mytest exists" "[ -f ${BUILD_DIR}/bin/mytest ]"
   assertTrue "mytest is executable" "[ -x ${BUILD_DIR}/bin/mytest ]"
 
   assertEquals "running mytest should print 'ok'" "ok" "$(${BUILD_DIR}/bin/mytest 2>&1)"
-}
-
-testCompileGodirApp() {
-  _createGodirProject
-
-  compile
-
-  assertCapturedSuccess
-  assertCaptured "should install default Go version" "-----> Installing go1.4.1... done"
-  assertCaptured "should recommend godep" "Try github.com/kr/godep for faster deploys."
-  assertCaptured "should install Virtualenv" "Installing Virtualenv... done"
-  assertCaptured "should install Mercurial" "Installing Mercurial... done"
-  assertCaptured "should install Bazaar" "Installing Bazaar... done"
-  assertCaptured "should run go get" "-----> Running: go get -tags heroku ./..."
 }

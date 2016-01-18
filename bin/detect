@@ -2,7 +2,7 @@
 # bin/detect <build-dir>
 set -e
 
-if [[ -f $1/production_build_go ]]; then
+if [[ -f $1/production_build_go.json ]]; then
   echo "Vendored Go"
 else
   echo "no"
