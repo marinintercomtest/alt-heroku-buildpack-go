@@ -31,7 +31,7 @@ testCompileVendoredApp() {
 
   compile
 
-  assertCapturedSuccess
+  assertEquals "Expected captured exit code to be 0; was <${RETURN}>" "0" "${RETURN}"
 
   assertCaptured "should install GoVersion from production_build_go.json" "-----> Installing go1.5.3... done"
   assertCaptured "should run go install" "-----> Running: go install -v -tags heroku ./..."
