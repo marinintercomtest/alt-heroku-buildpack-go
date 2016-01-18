@@ -100,6 +100,7 @@ then
   warn "production_build_go_file is required"
   exit 1
 elif
+then
   step "Checking production_build_go file."
   if ! jq -r . < $build/production_build_go.json > /dev/null
   then
@@ -109,7 +110,7 @@ elif
   name=$(<$build/production_build_go.json jq -r .Name)
   ver=$(<$build/production_build_go.json jq -r .GoVersion)
 fi
-#
+
 # if test -f $build/Godeps
 # then
 #     warn ""
