@@ -287,26 +287,26 @@ cd $p
 
 # step "Running: go install -v ${FLAGS[@]} $pkgs"
 # go install -v "${FLAGS[@]}" $pkgs
-step "Running: go install -v ${FLAGS[@]}"
-go install -v "${FLAGS[@]}"
-
-# if test -e $build/Godeps
-# then
-#     if test "$VendorExperiment" = "true"
-#     then
-#       step "Running: go install -v ${FLAGS[@]} $pkgs"
-#       go install -v "${FLAGS[@]}" $pkgs
-#     else
-#       step "Running: godep go install ${FLAGS[@]} $pkgs"
-#       godep go install "${FLAGS[@]}" $pkgs
-#     fi
-# else
-#     step "Running: go get ${FLAGS[@]} $pkgs"
-#     go get "${FLAGS[@]}" $pkgs
-# fi
-
-rm -rf $build/.heroku
-
-mkdir -p $build/.profile.d
-echo 'PATH=$PATH:$HOME/bin' > $build/.profile.d/go.sh
-cp $buildpack/vendor/concurrency.sh $build/.profile.d/
+# step "Running: go install -v ${FLAGS[@]}"
+# go install -v "${FLAGS[@]}"
+#
+# # if test -e $build/Godeps
+# # then
+# #     if test "$VendorExperiment" = "true"
+# #     then
+# #       step "Running: go install -v ${FLAGS[@]} $pkgs"
+# #       go install -v "${FLAGS[@]}" $pkgs
+# #     else
+# #       step "Running: godep go install ${FLAGS[@]} $pkgs"
+# #       godep go install "${FLAGS[@]}" $pkgs
+# #     fi
+# # else
+# #     step "Running: go get ${FLAGS[@]} $pkgs"
+# #     go get "${FLAGS[@]}" $pkgs
+# # fi
+#
+# rm -rf $build/.heroku
+#
+# mkdir -p $build/.profile.d
+# echo 'PATH=$PATH:$HOME/bin' > $build/.profile.d/go.sh
+# cp $buildpack/vendor/concurrency.sh $build/.profile.d/
