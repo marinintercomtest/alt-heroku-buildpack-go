@@ -146,7 +146,7 @@ GOROOT=$cache/$ver/go export GOROOT
 GOPATH=$build/.heroku/go export GOPATH
 PATH=$GOROOT/bin:$PATH
 
-# Enforce user of /vendor folder
+# Enforce use of /vendor folder
 if test ! -d "$build/vendor"
 then
   warn ""

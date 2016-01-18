@@ -1,6 +1,10 @@
-# Go Buildpack Changelog
+# Alt-Go Buildpack Changelog
 
 ## Unreleased
+
+## v25 (2016-01-18)
+
+Remove support for Godeps, instead use our own production_build_go.json and /vendor'd dependencies.
 
 ## v25 (2016-01-13)
 
